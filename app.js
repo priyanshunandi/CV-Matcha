@@ -363,12 +363,10 @@ function renderResults() {
       <td>${result.years === null ? "Unknown" : `${result.years} yrs`}</td>
       <td>${locationLabel(result.locationMatch)}</td>
       <td class="action-cell">
-        <div class="decision-control" data-decision-group="${result.id}">
-          ${renderDecisionButton(result.id, "Shortlist")}
-          ${renderDecisionButton(result.id, "Maybe")}
-          ${renderDecisionButton(result.id, "Reject")}
-        </div>
-        <button class="ghost-button preview-button" type="button" data-preview="${result.id}"><i data-lucide="eye"></i>Preview</button>
+        <button class="ghost-button preview-button" type="button" data-preview="${result.id}">
+          <i data-lucide="eye"></i>
+          Preview
+        </button>
       </td>
     </tr>
   `).join("");
