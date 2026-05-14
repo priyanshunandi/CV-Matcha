@@ -1,0 +1,283 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV Matcha</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=13">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.7.2/mammoth.browser.min.js" defer></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+  <script src="app.js?v=13" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Workflow">
+      <a class="brand" href="#upload" aria-label="CV Matcha home">
+        <span class="brand-mark">CM</span>
+        <span>
+          <strong>CV Matcha</strong>
+          <small>Recruiting review console</small>
+        </span>
+      </a>
+
+      <p class="sidebar-intro">Upload CVs, define the hiring filter, then review a ranked shortlist with candidate-level evidence.</p>
+
+      <nav class="step-nav" aria-label="Pages">
+        <a class="nav-step active" href="#upload" data-step-link="upload">
+          <i data-lucide="upload-cloud"></i>
+          <span>Upload CVs</span>
+        </a>
+        <a class="nav-step" href="#filters" data-step-link="filters">
+          <i data-lucide="sliders-horizontal"></i>
+          <span>Fill Filters</span>
+        </a>
+        <a class="nav-step" href="#results" data-step-link="results">
+          <i data-lucide="bar-chart-3"></i>
+          <span>Results</span>
+        </a>
+        <a class="nav-step" href="#candidate" data-step-link="candidate">
+          <i data-lucide="user-round-search"></i>
+          <span>Candidate Preview</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="step-meta"><span id="stepText">Step 1 of 4</span><span>Private browser workspace</span></div>
+        <div class="progress-track"><span id="progressFill"></span></div>
+      </div>
+    </aside>
+
+    <main class="main-panel">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Talent review</p>
+          <h1 id="pageTitle">Upload CVs</h1>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-button close-button" id="resetBtn" type="button" aria-label="Reset workspace" title="Reset workspace">
+            <i data-lucide="rotate-ccw"></i>
+          </button>
+          <button class="ghost-button" id="sampleBtn" type="button">
+            <i data-lucide="sparkles"></i>
+            Load sample CVs
+          </button>
+        </div>
+      </header>
+
+      <section class="page active" id="uploadPage" data-page="upload" aria-labelledby="pageTitle">
+        <div class="content-grid upload-grid">
+          <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload CV files">
+            <input id="fileInput" type="file" multiple accept=".pdf,.docx,.txt,.md,.rtf">
+            <div class="dropzone-icon">
+              <i data-lucide="file-up"></i>
+            </div>
+            <h2>Drop CV files here</h2>
+            <p>Upload a batch of resumes for criteria-based ranking. PDF, DOCX, TXT, MD, and RTF are supported.</p>
+            <button class="primary-button" type="button" id="browseBtn">
+              <i data-lucide="folder-open"></i>
+              Browse files
+            </button>
+          </div>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Batch intake</p>
+                <h2>Uploaded CVs</h2>
+              </div>
+              <span class="count-pill" id="uploadCount">0 files</span>
+            </div>
+            <div class="file-list" id="fileList">
+              <p class="empty-state">No CVs uploaded yet.</p>
+            </div>
+            <div class="panel-actions">
+              <button class="secondary-button" type="button" data-go="filters">
+                Continue
+                <i data-lucide="arrow-right"></i>
+              </button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="page" id="filtersPage" data-page="filters" aria-labelledby="pageTitle">
+        <form class="filters-layout" id="criteriaForm">
+          <section class="panel form-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Requisition</p>
+                <h2>Search Setup</h2>
+              </div>
+            </div>
+            <div class="form-grid">
+              <label>
+                <span>Requisition name</span>
+                <input name="sessionName" type="text" placeholder="Senior FE India batch">
+              </label>
+              <label>
+                <span>Role</span>
+                <input name="role" type="text" placeholder="Frontend Engineer">
+              </label>
+              <label>
+                <span>Experience range</span>
+                <select name="experience">
+                  <option value="0-2">0-2 years</option>
+                  <option value="2-4">2-4 years</option>
+                  <option value="4-7" selected>4-7 years</option>
+                  <option value="7-10">7-10 years</option>
+                  <option value="10-20">10+ years</option>
+                </select>
+              </label>
+              <label>
+                <span>Location</span>
+                <input name="location" type="text" placeholder="Bengaluru, Remote, optional">
+              </label>
+            </div>
+          </section>
+
+          <section class="panel form-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Scoring model</p>
+                <h2>Ranking Inputs</h2>
+              </div>
+            </div>
+            <div class="form-stack">
+              <div class="skill-field" data-skill-field="skills">
+                <label for="skillsInput">Must-have skills</label>
+                <div class="add-control">
+                  <input id="skillsInput" type="text" placeholder="Payroll, HRIS, recruitment">
+                  <button class="ghost-button add-chip-button" type="button" data-add-skill="skills">
+                    <i data-lucide="plus"></i>
+                    Add
+                  </button>
+                </div>
+                <div class="chip-list" id="skillsChips" aria-label="Must-have skills"></div>
+                <textarea class="sr-only" name="skills" id="skillsHidden"></textarea>
+              </div>
+              <div class="skill-field" data-skill-field="niceToHaves">
+                <label for="niceToHavesInput">Nice to haves</label>
+                <div class="add-control">
+                  <input id="niceToHavesInput" type="text" placeholder="Excel, onboarding, employee relations">
+                  <button class="ghost-button add-chip-button" type="button" data-add-skill="niceToHaves">
+                    <i data-lucide="plus"></i>
+                    Add
+                  </button>
+                </div>
+                <div class="chip-list" id="niceToHavesChips" aria-label="Nice to haves"></div>
+                <textarea class="sr-only" name="niceToHaves" id="niceToHavesHidden"></textarea>
+              </div>
+            </div>
+            <div class="weight-row">
+              <label>
+                <span>Skill priority</span>
+                <input name="skillWeight" type="range" min="40" max="80" value="60">
+              </label>
+              <label>
+                <span>Experience priority</span>
+                <input name="experienceWeight" type="range" min="10" max="35" value="25">
+              </label>
+            </div>
+            <div class="panel-actions">
+              <button class="ghost-button" type="button" data-go="upload">
+                <i data-lucide="arrow-left"></i>
+                Back
+              </button>
+              <button class="primary-button" id="analyzeBtn" type="button">
+                <i data-lucide="scan-search"></i>
+                Analyze
+              </button>
+            </div>
+          </section>
+        </form>
+      </section>
+
+      <section class="page" id="resultsPage" data-page="results" aria-labelledby="pageTitle">
+        <section class="metrics-grid" aria-label="Analysis summary">
+          <div class="metric">
+            <span>Candidates</span>
+            <strong id="metricCandidates">0</strong>
+          </div>
+          <div class="metric">
+            <span>Strong matches</span>
+            <strong id="metricStrong">0</strong>
+          </div>
+          <div class="metric">
+            <span>Average score</span>
+            <strong id="metricAverage">0%</strong>
+          </div>
+          <div class="metric">
+            <span>Requisition</span>
+            <strong id="metricRequisition">Draft</strong>
+          </div>
+        </section>
+
+        <section class="panel results-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Ranked list</p>
+              <h2>CV Match Results</h2>
+            </div>
+            <div class="result-tools">
+              <label class="compact-search">
+                <i data-lucide="search"></i>
+                <input id="resultSearch" type="search" placeholder="Search candidates">
+              </label>
+              <button class="ghost-button" type="button" data-go="filters">
+                <i data-lucide="settings-2"></i>
+                Edit filters
+              </button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Candidate</th>
+                  <th>Match</th>
+                  <th>Skills</th>
+                  <th>Experience</th>
+                  <th>Location</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="resultsBody">
+                <tr>
+                  <td colspan="7" class="empty-cell">Upload CVs and run analysis to see results.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section class="page" id="candidatePage" data-page="candidate" aria-labelledby="pageTitle">
+        <section class="candidate-shell" id="candidateShell">
+          <div class="panel">
+            <p class="empty-state">Select a candidate from Results to preview details.</p>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
