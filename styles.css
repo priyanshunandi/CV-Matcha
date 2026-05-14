@@ -596,21 +596,20 @@ input[type="range"] {
 .table-wrap {
   overflow-x: auto;
   border-top: 1px solid #e6e8ed;
-  background: #f7f8fc;
-  padding: 16px;
+  background: #ffffff;
 }
 
 table {
   width: 100%;
   min-width: 920px;
   border-collapse: separate;
-  border-spacing: 0 12px;
+  border-spacing: 0;
   background: transparent;
 }
 
 th,
 td {
-  padding: 20px 24px;
+  padding: 18px 22px;
   border-bottom: 1px solid #edf0f4;
   text-align: left;
   vertical-align: middle;
@@ -621,27 +620,18 @@ tr:last-child td { border-bottom: 0; }
 
 tbody tr {
   background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
-  transition: transform 200ms ease, box-shadow 200ms ease;
-  border: 1px solid #f0f2f5;
+  transition: background 160ms ease;
 }
 
-tbody tr:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
-  background: #fafbfc;
-}
+tbody tr:hover { background: #f3f5f9; }
 
 th {
-  background: #f8f9fc;
+  background: #f5f6f9;
   color: #667085;
   font-size: 12px;
   font-weight: 760;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  border-radius: 12px 12px 0 0;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
 }
 
 .score-bar {
