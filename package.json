@@ -1,0 +1,24 @@
+{
+  "name": "cv-matcha",
+  "version": "1.0.0",
+  "description": "CV Matcha - Recruiting review console for matching CVs with job requirements",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"No tests specified\"",
+    "start": "npx serve ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/priyanshunandi/CV-Matcha.git"
+  },
+  "keywords": ["cv", "resume", "matching", "recruiting", "analytics"],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/priyanshunandi/CV-Matcha/issues"
+  },
+  "homepage": "https://github.com/priyanshunandi/CV-Matcha#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
